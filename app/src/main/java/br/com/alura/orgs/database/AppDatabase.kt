@@ -34,7 +34,7 @@ abstract class AppDatabase : RoomDatabase() {
                 context,
                 AppDatabase::class.java,
                 "orgs.db"
-            ).addMigrations(migration_1_2).build().also {
+            ).addMigrations(MIGRATION_1_2).build().also {
                 db = it
             }
         }

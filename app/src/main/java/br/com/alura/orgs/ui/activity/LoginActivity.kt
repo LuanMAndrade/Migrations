@@ -2,9 +2,15 @@ package br.com.alura.orgs.ui.activity
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleCoroutineScope
+import androidx.lifecycle.lifecycleScope
+import br.com.alura.orgs.database.AppDatabase
 import br.com.alura.orgs.databinding.ActivityLoginBinding
 import br.com.alura.orgs.extensions.vaiPara
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity() {
 
@@ -12,10 +18,13 @@ class LoginActivity : AppCompatActivity() {
         ActivityLoginBinding.inflate(layoutInflater)
     }
 
+    private val usuarioDao by lazy {
+        AppDatabase.instancia(this).usuarioDao()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        Log.i("teste", "primeira")
         configuraBotaoCadastrar()
         configuraBotaoEntrar()
     }
@@ -24,8 +33,16 @@ class LoginActivity : AppCompatActivity() {
         binding.activityLoginBotaoEntrar.setOnClickListener {
             val usuario = binding.activityLoginUsuario.text.toString()
             val senha = binding.activityLoginSenha.text.toString()
-            Log.i("LoginActivity", "onCreate: $usuario - $senha")
-            vaiPara(ListaProdutosActivity::class.java)
+           lifecycleScope.launch {
+               usuarioDao.autentica(usuario, senha)?.let {
+                   vaiPara(ListaProdutosActivity::class.java){
+                       putExtra("CHAVE_ID",it.id)
+                   }
+               } ?: Toast.makeText(
+                   this@LoginActivity,
+                   "Falha na autenticação",
+                   Toast.LENGTH_SHORT).show()
+           }
         }
     }
 
