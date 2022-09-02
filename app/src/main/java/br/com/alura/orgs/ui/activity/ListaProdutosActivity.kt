@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.lifecycle.lifecycleScope
 import br.com.alura.orgs.database.AppDatabase
 import br.com.alura.orgs.databinding.ActivityListaProdutosActivityBinding
+import br.com.alura.orgs.preferences.dataStore
 import br.com.alura.orgs.ui.recyclerview.adapter.ListaProdutosAdapter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -36,12 +38,17 @@ class ListaProdutosActivity : AppCompatActivity() {
         lifecycleScope.launch {
             launch {  produtoDao.buscaTodos().collect { produtos ->
                 adapter.atualiza(produtos)
-            }}
-            intent.getStringExtra("CHAVE_ID")?.let { usuarioId ->
-            usuarioDao.searchForId(usuarioId).collect { usuario ->
-                Log.i("teste", "$usuario")
             }
+            }
+
+
+            dataStore.data.collect { preferences ->
+                preferences[stringPreferencesKey("usuarioLogado")]?.let { usuarioId ->
+                    usuarioDao.searchForId(usuarioId).collect { usuario ->
+                        Log.i("teste", "$usuario")
+                    }
                 }
+            }
             }
         }
 
