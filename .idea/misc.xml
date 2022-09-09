@@ -3,6 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Luan/Documents/GitHub/Migrations/app/src/main/res/layout/activity_formulario_cadastro_usuario.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Luan/Documents/GitHub/Migrations/app/src/main/res/layout/activity_lista_produtos_activity.xml" value="0.20416666666666666" />
+        <entry key="..\:/Users/Luan/Documents/GitHub/Migrations/app/src/main/res/layout/activity_login.xml" value="0.20416666666666666" />
         <entry key="..\:/Users/Luan/Documents/GitHub/Migrations/app/src/main/res/menu/menu_lista_produtos.xml" value="0.20416666666666666" />
       </map>
     </option>
