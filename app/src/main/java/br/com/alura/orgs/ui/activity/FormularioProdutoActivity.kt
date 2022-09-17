@@ -48,12 +48,12 @@ class FormularioProdutoActivity : AppCompatActivity() {
         tentaCarregarProduto()
         lifecycleScope.launch {
             dataStore.data.collect { preferences ->
-            preferences[stringPreferencesKey("usuarioLogado")]?.let { usuarioId ->
-                usuarioDao.searchForId(usuarioId).collect { usuario ->
-                    Log.i("teste", "$usuario")
+                preferences[stringPreferencesKey("usuarioLogado")]?.let { usuarioId ->
+                    usuarioDao.searchForId(usuarioId).collect { usuario ->
+                        Log.i("teste", "$usuario")
+                    }
                 }
             }
-        }
         }
 
 
@@ -95,7 +95,10 @@ class FormularioProdutoActivity : AppCompatActivity() {
         val botaoSalvar = binding.activityFormularioProdutoBotaoSalvar
 
         botaoSalvar.setOnClickListener {
-            val produtoNovo = criaProduto()
+            lifecycleScope.launch{
+                usuario
+            }
+            val produtoNovo = criaProduto(usuarioId)
             lifecycleScope.launch {
                 produtoDao.salva(produtoNovo)
                 finish()
@@ -103,7 +106,7 @@ class FormularioProdutoActivity : AppCompatActivity() {
         }
     }
 
-    private fun criaProduto(): Produto {
+    private fun criaProduto(usuarioId: String): Produto {
         val campoNome = binding.activityFormularioProdutoNome
         val nome = campoNome.text.toString()
         val campoDescricao = binding.activityFormularioProdutoDescricao
@@ -116,12 +119,14 @@ class FormularioProdutoActivity : AppCompatActivity() {
             BigDecimal(valorEmTexto)
         }
 
+
         return Produto(
             id = produtoId,
             nome = nome,
             descricao = descricao,
             valor = valor,
-            imagem = url
+            imagem = url,
+            usuarioId = usuarioId
         )
     }
 

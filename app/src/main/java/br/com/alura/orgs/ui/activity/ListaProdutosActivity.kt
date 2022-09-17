@@ -42,7 +42,7 @@ class ListaProdutosActivity : AppCompatActivity() {
         configuraFab()
         lifecycleScope.launch {
             launch {
-                produtoDao.buscaTodos().collect { produtos ->
+                produtoDao.searchListForId(usuarioId).collect { produtos ->
                     adapter.atualiza(produtos)
                 }
             }
@@ -52,6 +52,7 @@ class ListaProdutosActivity : AppCompatActivity() {
                 }?: vaiPara(LoginActivity::class.java)
             }
         }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
